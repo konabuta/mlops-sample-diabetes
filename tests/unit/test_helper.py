@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from model.train import get_csvs_df
+from model.helper import get_csvs_df
 
 
 def test_csvs_no_files():

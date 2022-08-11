@@ -3,8 +3,8 @@ name: Code Quality (Linter, Code Formatting)
 on: [pull_request, workflow_dispatch]
 
 jobs:
-  code-quality:
-    name: linting
+  python-pytest:
+    name: python-pytest
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -16,15 +16,15 @@ jobs:
       - name: Install related python packages
         run: |
           pip install -r requirements.txt
-      - name: Sort python packages import
-        run: |
-          isort . --diff
-      - name: Code Formatting
-        run: |
-          black --check ./src
-      - name: Run linting tests
-        run: |
-          flake8 ./src --statistics --config=tox.ini --show-source
+
       - name: Pytest unit tests
+        id: basic-pytests
         run: |
-          pytest tests/unit/
+          pytest  tests/unit --cov="./src" --cov-report=html --cov-report=xml
+
+      - if: ${{ (steps.basic-pytests.outcome == 'success') }}
+        name: Upload code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-results
+          path: ./htmlcov
