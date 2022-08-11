@@ -1,0 +1,21 @@
+name: pre-commit checks
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  pre-commit:
+    name: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@main
+      - name: Use Python version 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install related python packages
+        run: |
+          pip install -r requirements.txt
+      - name: Run pre-commit
+        run: |
+          pre-commit run --all-files --show-diff-on-failure
