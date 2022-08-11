@@ -1,0 +1,27 @@
+name: Code Quality
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  job1:
+    name: linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@main
+      - name: Use Python version 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install related python packages
+        run: |
+          pip install -r requirements.txt
+      - name: Sort python packages import
+        run: |
+          isort . --diff
+      - name: Code Formatting
+        run: |
+          black --check ./src
+      - name: Run linting tests
+        run: |
+          flake8 ./src --statistics --config=tox.ini --show-source
