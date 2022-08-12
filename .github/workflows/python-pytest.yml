@@ -1,4 +1,4 @@
-name: Code Quality (Linter, Code Formatting)
+name: Pytest
 
 on: [pull_request, workflow_dispatch]
 
